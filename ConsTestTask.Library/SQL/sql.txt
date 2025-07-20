@@ -1,0 +1,73 @@
+﻿
+CREATE TABLE Books(
+ID UNIQUEIDENTIFIER PRIMARY KEY,
+Title NVARCHAR(100),
+Author NVARCHAR(100),
+YearPublish INT,
+Genre NVARCHAR(100),
+Contents XML);
+
+-- Процедуры insert, update, delete, select …
+GO
+
+-- Insert
+CREATE PROCEDURE AddBook
+@Id UNIQUEIDENTIFIER,
+@Title NVARCHAR(100),
+@Author NVARCHAR(100),
+@YearPublish INT,
+@Genre NVARCHAR(100),
+@Contents XML
+AS
+BEGIN
+	INSERT INTO Books (Id ,Title, Author, YearPublish, Genre, Contents)
+	VALUES (@Id, @Title, @Author, @YearPublish, @Genre, @Contents)
+END;
+
+-- Update
+GO
+
+CREATE PROCEDURE UpdateBook 
+@Id UNIQUEIDENTIFIER,
+@Title NVARCHAR(100),
+@Author NVARCHAR(100),
+@YearPublish INT,
+@Genre NVARCHAR(100),
+@Contents XML
+AS
+BEGIN
+	UPDATE Book
+	SET Title = @Title, Author = @Author, YearPublish = @YearPublish, Genre = @Genre, Contents = @Contents 
+	WHERE Id = @Id
+END
+
+-- Delete
+GO
+
+CREATE PROCEDURE DeleteBook
+@Id UNIQUEIDENTIFIER
+AS
+BEGIN
+	DELETE FROM Books 
+	WHERE Id = @Id
+END;
+
+-- Get by Id
+GO
+
+CREATE PROCEDURE GetBookById
+@Id UNIQUEIDENTIFIER
+AS 
+BEGIN
+	SELECT * FROM Books
+	WHERE Id = @Id
+END;
+
+-- Get All books
+GO
+
+CREATE PROCEDURE GetBooks
+AS 
+BEGIN
+	SELECT * FROM Books
+END;

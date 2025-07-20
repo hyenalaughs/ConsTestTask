@@ -1,0 +1,6 @@
+C:\Users\xsrv\source\repos\ConsTestTask\ConsTestTask.Library\bin\Debug\ConsTestTask.Library.dll
+C:\Users\xsrv\source\repos\ConsTestTask\ConsTestTask.Library\bin\Debug\ConsTestTask.Library.pdb
+C:\Users\xsrv\source\repos\ConsTestTask\ConsTestTask.Library\obj\Debug\ConsTestTask.Library.csproj.AssemblyReference.cache
+C:\Users\xsrv\source\repos\ConsTestTask\ConsTestTask.Library\obj\Debug\ConsTestTask.Library.csproj.CoreCompileInputs.cache
+C:\Users\xsrv\source\repos\ConsTestTask\ConsTestTask.Library\obj\Debug\ConsTestTask.Library.dll
+C:\Users\xsrv\source\repos\ConsTestTask\ConsTestTask.Library\obj\Debug\ConsTestTask.Library.pdb
