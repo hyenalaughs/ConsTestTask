@@ -156,22 +156,21 @@ S - сумма на счете
 
 Ответ:  
 ```sql
-CREATE OR ALTER PROCEDURE dbo.TransferFunds
-      @N1 bigint         
-    , @N2 bigint          
-    , @S  decimal(19,4)   
+CREATE OR ALTER PROCEDURE TransferFunds
+      @Id1 UNIQUEIDENTIFIER,         
+      @Id2 UNIQUEIDENTIFIER,          
+      @Money  decimal(19, 4)   
 AS
 BEGIN
     SET NOCOUNT ON;
     SET XACT_ABORT ON;  
 
-    -- Базовые валидации входа
-    IF @S <= 0
+    IF @Money <= 0
     BEGIN
         THROW 50001, 'Сумма перевода должна быть > 0.', 1;
     END;
 
-    IF @N1 = @N2
+    IF @Id1 = @Id2
     BEGIN
         THROW 50002, 'Нельзя переводить на тот же счёт.', 1;
     END;
@@ -183,25 +182,25 @@ BEGIN
             @BalSource decimal(19,4),
             @BalDest   decimal(19,4);
 
-        IF @N1 < @N2
+        IF @Id1 < @Id2
         BEGIN
-            SELECT @BalSource = S 
-            FROM dbo.T WITH (UPDLOCK, HOLDLOCK, ROWLOCK)
-            WHERE N = @N1;
+            SELECT @BalSource = @Money 
+            FROM dbo.Accounts WITH (UPDLOCK, HOLDLOCK, ROWLOCK)
+            WHERE Id = @Id1;
 
-            SELECT @BalDest = S
-            FROM dbo.T WITH (UPDLOCK, HOLDLOCK, ROWLOCK)
-            WHERE N = @N2;
+            SELECT @BalDest = @Money
+            FROM dbo.Accounts WITH (UPDLOCK, HOLDLOCK, ROWLOCK)
+            WHERE Id = @Id2;
         END
         ELSE
         BEGIN
-            SELECT @BalDest = S
-            FROM dbo.T WITH (UPDLOCK, HOLDLOCK, ROWLOCK)
-            WHERE N = @N2;
+            SELECT @BalDest = @Money
+            FROM Accounts WITH (UPDLOCK, HOLDLOCK, ROWLOCK)
+            WHERE Id = @Id2;
 
-            SELECT @BalSource = S 
-            FROM dbo.T WITH (UPDLOCK, HOLDLOCK, ROWLOCK)
-            WHERE N = @N1;
+            SELECT @BalSource = @Money 
+            FROM Accounts WITH (UPDLOCK, HOLDLOCK, ROWLOCK)
+            WHERE Id = @Id1;
         END
 
         IF @BalSource IS NULL
@@ -210,16 +209,16 @@ BEGIN
         IF @BalDest IS NULL
             THROW 50004, 'Счёт-получатель не найден.', 1;
 
-        IF @BalSource < @S
+        IF @BalSource < @Money
             THROW 50005, 'Недостаточно средств на исходном счёте.', 1;
 
-        UPDATE dbo.T
-        SET S = S - @S
-        WHERE N = @N1;
+        UPDATE Accounts
+        SET Balance = Balance - @Money
+        WHERE Id = @Id1;
 
-        UPDATE dbo.T
-        SET S = S + @S
-        WHERE N = @N2;
+        UPDATE Accounts
+        SET Balance = Balance + @Money
+        WHERE Id = @Id2;
 
         COMMIT TRAN;
     END TRY
@@ -231,6 +230,7 @@ BEGIN
     END CATCH
 END;
 GO
+
 ```
 
 2.2  ЗАДАЧА НА ВЫВОД В XML.  
