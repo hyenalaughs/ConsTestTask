@@ -301,16 +301,20 @@ WHERE Bid.StatusId = 6
 Написать алгоритм или рассказать идею, как решить  
 
 ```C#
-    public bool HasDuplicates(int[] M)
+bool HasDuplicate(int[] arr)
+{
+    int?[] support = new int?[Int32.MaxValue];
+
+    for (int i = 0; i < arr.Length; i++)
     {
-        var seen = new HashSet<int>();
-        foreach (var x in M)
-        {
-            if (!seen.Add(x))  // Add возвращает false, если элемент уже есть
-                return true;
-        }
-        return false;
+        if (support[i] == null)
+            support[arr[i]] = arr[i];
+        else
+            return true;
     }
+
+    return false;
+}
 ```
 
 
